@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.UserMapper">
+    <select id="findByPhone" parameterType="String" resultType="User">
+        SELECT *
+        FROM user
+        WHERE phone = #{0}
+    </select>
+    <insert id="insert" parameterType="User">
+        INSERT INTO user(phone, name, gender, psw, token)
+        VALUES (#{phone},#{name},#{gender},#{psw},#{token})
+    </insert>
+    <update id="updateToken" parameterType="String">
+        UPDATE user
+        SET token = #{1}
+        WHERE phone = #{0}
+    </update>
+    <update id="updatePsw" parameterType="String">
+        UPDATE user
+        SET psw = #{1}
+        WHERE phone = #{0}
+    </update>
+    <select id="findByToken" parameterType="String" resultType="User">
+        SELECT *
+        FROM user
+        WHERE token = #{0}
+    </select>
+</mapper>

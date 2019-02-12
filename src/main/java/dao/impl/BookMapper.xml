@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.BookMapper">
+    <select id="findById" parameterType="int" resultType="Book">
+        SELECT *
+        FROM book
+        WHERE id = #{id}
+    </select>
+    <insert id="insertBook" parameterType="Book">
+        INSERT INTO book(name, author, price, level, type, description, owner, pic, valid)
+        VALUES(#{name},#{author},#{price},#{level},#{type},#{description},#{owner},#{pic},#{valid})
+    </insert>
+    <select id="getBooksByOwner" parameterType="String" resultType="Book">
+        SELECT *
+        FROM book
+        WHERE owner = #{0}
+    </select>
+    <delete id="deleteById" parameterType="int">
+        DELETE FROM book
+        WHERE id = #{0}
+    </delete>
+    <update id="changeValid">
+        UPDATE book
+        SET valid = #{0}
+        WHERE id = #{1}
+    </update>
+    <select id="getLastBook" parameterType="String" resultType="Book">
+        SELECT *
+        FROM book
+        WHERE valid = TRUE AND type LIKE #{0}
+        ORDER BY id DESC
+        LIMIT 0,6
+    </select>
+    <select id="getMyLike" resultType="Book">
+        SELECT *
+        FROM book
+        WHERE valid = TRUE
+        ORDER BY RAND()
+        LIMIT 0,3
+    </select>
+    <select id="search" resultType="Book" parameterType="java.util.List">
+        SELECT *
+        FROM book
+        WHERE valid = TRUE AND 
+        <foreach collection="array" item="item" separator="OR" open="(" close=")">
+            name LIKE #{item} OR author LIKE #{item} OR type LIKE #{item} OR description LIKE #{item}
+        </foreach>
+    </select>
+    <select id="getBookByType" resultType="Book">
+        SELECT *
+        FROM book
+        WHERE valid = TRUE AND type LIKE #{0}
+        ORDER BY id DESC
+        LIMIT #{1}, #{2}
+    </select>
+</mapper>

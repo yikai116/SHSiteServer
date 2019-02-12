@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.ShopcartMapper">
+    
+    <insert id="insert" parameterType="Shopcart">
+        INSERT INTO shopcart(buyer, bookid,valid)
+        VALUES(#{buyer},#{bookid},TRUE )
+    </insert>
+    <delete id="delete" parameterType="Shopcart">
+        UPDATE shopcart
+        SET valid = FALSE
+        WHERE buyer = #{buyer} AND bookid = #{bookid}
+    </delete>
+    <select id="getByBuyer" parameterType="String" resultType="Book">
+        SELECT book.*
+        FROM shopcart JOIN book
+        WHERE shopcart.buyer = #{0} AND shopcart.valid = TRUE AND shopcart.bookid = book.id
+    </select>
+</mapper>
